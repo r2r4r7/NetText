@@ -1,7 +1,7 @@
 class NetText(object):
     x = 5;
     
-    print("Hello World")
+    print("Giggity")
 
     pass
 
