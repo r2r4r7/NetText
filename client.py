@@ -1,17 +1,36 @@
-# Import socket module 
 import socket			 
+import threading
 
-# Create a socket object 
-s = socket.socket()		 
+def handle_receive(client_socket):
+    while True:
+        try:
+            message = client_socket.recv(1024).decode()
+            if message:
+                print(f"Server: {message}")
+            else:
+                break
+        except:
+            break  
 
-# Define the port on which you want to connect 
-port = int(input("\nWhat is the port for the server?\n"))
+def handle_send(client_socket):
+    while True:
+        message = input("Enter message to send: ")
+        client_socket.send(message.encode())
 
-# connect to the server on local computer 
-ip = input("\nWhat is the ip address for the server?\n")
-s.connect((ip, port)) 
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect(('70.177.142.69', 12345))
 
-# receive data from the server and decoding to get the string.
-print (s.recv(1024).decode())
-# close the connection 
-s.close()	 
+# Start threads for sending and receiving
+receive_thread = threading.Thread(target=handle_receive, args=(client_socket,))
+send_thread = threading.Thread(target=handle_send, args=(client_socket,))
+
+#receive_thread.daemon = True
+
+receive_thread.start()
+send_thread.start()
+
+# Keep the main thread running to wait for threads to complete
+receive_thread.join()
+send_thread.join()
+
+client_socket.close()

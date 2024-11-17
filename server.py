@@ -31,7 +31,7 @@ while True:
   c.send('Thank you for connecting\n'.encode()) 
  
   # Close the connection with the client 
-  c.close()
+  #c.close()
    
   # Breaking once connection closed
   break
