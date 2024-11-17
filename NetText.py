@@ -1,0 +1,6 @@
+class NetText(object):
+    pass
+
+
+
+
