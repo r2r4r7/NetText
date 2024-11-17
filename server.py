@@ -1,6 +1,29 @@
 
 # import socket library
 import socket
+import threading
+
+# Function to handle receiving messages
+def receive_messages(sock):
+    while True:
+        try:
+            message = sock.recv(1024).decode('utf-8')  # Adjust buffer size as needed
+            if message:
+                print(message)  # Print Recieved Message
+            else:
+                break  # Connection closed
+        except Exception as e:
+            print(f"Error receiving message: {e}")
+            break
+        
+def send_messages(connection):
+    while True:
+        text = input('>')
+    
+        if text == 'exit':
+            break
+        else:
+            connection.send(text.encode()) 
 
 # create socket object
 s = socket.socket()
@@ -19,19 +42,18 @@ print ("Socket binded to %s\n" %(port))
 s.listen(5)     
 print ("Socket is listening\n")
 
-# a forever loop until we interrupt it or 
-# an error occurs 
-while True: 
- 
 # Establish connection with client. 
-  c, addr = s.accept()     
-  print ('Got connection from\n', addr )
+c, addr = s.accept()
+print ('Got connection from\n', addr )
+
+receive_thread = threading.Thread(target=receive_messages, args=(s,))
+receive_thread.daemon = True  # Daemonize the thread so it exits with the main program
+receive_thread.start()
+  
+send_messages(c)
  
-  # send a thank you message to the client. encoding to send byte type. 
-  c.send('Thank you for connecting\n'.encode()) 
+# send a thank you message to the client. encoding to send byte type. 
+c.send('Thank you for connecting\n'.encode()) 
  
-  # Close the connection with the client 
-  c.close()
-   
-  # Breaking once connection closed
-  break
+# Close the connection with the client 
+c.close()
