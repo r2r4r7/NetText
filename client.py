@@ -18,7 +18,7 @@ def handle_send(client_socket):
         client_socket.send(message.encode())
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(('70.177.142.69', 12345))
+client_socket.connect((input('Please input an ip: '), 12345))
 
 # Start threads for sending and receiving
 receive_thread = threading.Thread(target=handle_receive, args=(client_socket,))

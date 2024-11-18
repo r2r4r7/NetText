@@ -36,7 +36,7 @@ port = int(input("\nWhat is the port for the server?\n"))
 # this makes the server listen to requests 
 # coming from other computers on the network 
 s.bind(('', port))         
-print ("Socket binded to %s\n" %(port))
+print ("Socket bound to %s\n" %(port))
 
 # 5 argument specifies the maximum number of queued connections
 s.listen(5)     
